@@ -31,7 +31,7 @@ import           Data.Default
 import           Data.Maybe
 import           Data.Monoid
 import           Options.Applicative
-import           System.IO               (stdin, stdout)
+import           System.IO               (stdin, stdout, hSetBuffering, BufferMode(..))
 import           System.SetEnv
 
 import           Prelude
@@ -167,7 +167,8 @@ runPluginProvider os mcfg transitionHandler mDyreParams = case (hostPort os, uni
     _ | env os ->
         createHandle Environment >>= \s -> run s s
 
-    _ ->
+    _ -> do
+        hSetBuffering stdout NoBuffering
         run stdout stdin
 
   where
